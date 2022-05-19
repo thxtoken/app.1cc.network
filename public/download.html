@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>1CC APP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: #22252d;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      #logo {
+        width: 96px;
+        height: 96px;
+      }
+      #title {
+        color: white;
+        font-size: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-family: 'Rajdhani', sans-serif;
+      }
+      #button {
+        color: #1ADEED;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="/assets/icons/logo192_round.png" id="logo" alt="logo" />
+    <h1 id="title">APP COMING SOON</h1>
+    <a href="https://thxtoken.gitbook.io/1cc-docs/introduction/project-overview" id="button">
+      Learn More
+    </a>
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script>
+      const typerwriter = new Typewriter('#title', {
+        strings: ['APP COMING SOON', 'OPEN WITH DESKTOP BROWSER', 'https://1cc.network'],
+        autoStart: true,
+        cursor: '_',
+        delay: 50,
+        loop: true
+      })
+    </script>
+  </body>
+</html>

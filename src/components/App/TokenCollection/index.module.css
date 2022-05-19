@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex: 1;
+  background: #1B1E26;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+em {
+  color: white;
+}
+
+.refresh:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: 50px;
+}
+
+.header {
+  position: relative;
+}
+
+.headerImage {
+  width: 100%;
+}
+
+.aboutText {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+}
+
+.loading {
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  color: white;
+}
+
+.highlight {
+  color: #1adeed
+}

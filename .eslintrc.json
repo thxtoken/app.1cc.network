@@ -1,0 +1,16 @@
+{
+  "extends": ["react-app", "plugin:prettier/recommended"],
+  "plugins": ["prettier", "react-hooks"],
+  "rules": {
+    "semi": "off",
+    "curly": "off",
+    "comma-dangle": ["error", "never"],
+    "prettier/prettier": "error",
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": ["function", "export"] },
+      { "blankLine": "always", "prev": "*", "next": "class" }
+    ]
+  },
+  "ignorePatterns": ["/src/patches"]
+}
