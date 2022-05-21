@@ -4,10 +4,9 @@ import { debounce, isNumber } from 'lodash'
 import { Input, InputRef, message } from 'antd'
 
 import StyleSheet, { scale } from '@/libs/StyleSheet'
-import { useMe } from '@/libs/hooks'
+import { useGwei, useMe } from '@/libs/hooks'
 import { addressSummary, delay } from '@/libs/utlis'
 import { getEthereumAddress } from '@/services/ens'
-import { getGasFee } from '@/services/transfer'
 import { syncUser } from '@/services/auth'
 
 import Button from '../Button'
@@ -18,11 +17,11 @@ import { Dialog, DialogInstance } from '../DialogProvider'
 const TransferDialog: React.FC = () => {
   const { t } = useTranslation()
   const user = useMe()
+  const gwei = useGwei()
 
   const [address, setAddress] = useState(user?.address || '')
   const [amount, setAmount] = useState(0)
   const [addressError, setAddressError] = useState(false)
-  const [gasFee, setGasFee] = useState('0.00000000')
 
   const addressInputRef = useRef<InputRef>(null)
   const amountInputRef = useRef<InputRef>(null)
@@ -33,7 +32,6 @@ const TransferDialog: React.FC = () => {
 
   useEffect(() => {
     syncUser()
-    getGasFee().then(setGasFee)
   }, [])
 
   if (!user) {
@@ -63,7 +61,6 @@ const TransferDialog: React.FC = () => {
     TransferPreviewPopup.show({
       address: validAddress,
       amount,
-      gasFee,
       onClose: () => TransferPopup.close()
     })
 
@@ -122,8 +119,8 @@ const TransferDialog: React.FC = () => {
         <Input
           type="text"
           style={{ ...styles.input, ...styles.inputDisabled }}
-          value={gasFee + ' ETH'}
-          suffix={<CircleLoading loading={Number(gasFee) === 0} />}
+          value={gwei + ' Gwei'}
+          suffix={<CircleLoading loading={Number(gwei) === 0} />}
           readOnly
         />
       </section>

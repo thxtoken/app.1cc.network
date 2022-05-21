@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { confirmUnclaimedTransfer, fetchUnclaimedTransfer, getGasFee } from '@/services/transfer'
+import { confirmUnclaimedTransfer, fetchUnclaimedTransfer } from '@/services/transfer'
 import { checkEthNetwork, connectWallet } from '@/services/wallet'
 
 import Button from '../Button'
@@ -39,16 +39,9 @@ const TransferButton: React.FC = () => {
         return
       }
 
-      setLoading(true)
-      const gasFee = await getGasFee()
-      const address = unclaimedTransfer.toAddress
-      const amount = unclaimedTransfer.tokens
-      setLoading(false)
-
       return TransferPreviewPopup.show({
-        address,
-        amount,
-        gasFee,
+        address: unclaimedTransfer.toAddress,
+        amount: unclaimedTransfer.tokens,
         transfer: unclaimedTransfer
       })
     }

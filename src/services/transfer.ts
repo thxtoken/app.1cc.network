@@ -1,5 +1,3 @@
-import { Contract } from 'web3-eth-contract'
-import { floor, toArray } from 'lodash'
 import { Modal } from 'antd'
 
 import { TransferStatus, TransferType } from '@/types/transfer'
@@ -7,10 +5,11 @@ import { ContractClaimTokensParams } from '@/types/contract'
 
 import HTTP from './http'
 import { me } from './auth'
-import { withdrawContract } from './contract'
 
 import web3 from './web3'
 import i18next from 'i18next'
+import { floor } from 'lodash'
+import { requestErrorHandlerAlert } from './error'
 
 export async function fetchTransferSignature(address: string, amount: number) {
   try {
@@ -34,38 +33,14 @@ export async function updateTransfer(id: number | string, transaction_hash: stri
   })
 }
 
-export async function estimateGas(contract: Contract) {
-  const address = me()?.address as string
-  const params = await fetchTransferSignature(address, 0)
-
-  try {
-    return await contract.methods.claimTokens(...toArray(params)).estimateGas()
-  } catch (error) {
-    console.log('[ContractService] estimateGas', error)
-    return 0
-  }
-}
-
-export async function getEstimateGas() {
-  const contract = await withdrawContract()
-  const gas = await estimateGas(contract)
-  return gas
-}
-
-export async function getGas() {
-  const block = await web3.eth.getBlock('latest')
-  return floor(block.gasLimit / block.transactions.length)
-}
-
 export async function getGasFee() {
   try {
-    const gas = await getGas()
     const gasPrice = await web3.eth.getGasPrice()
-    const fee = web3.utils.fromWei(web3.utils.toBN(gas).mul(web3.utils.toBN(gasPrice)))
-    return fee
+    const gwei = await web3.utils.fromWei(gasPrice, 'gwei')
+    return floor(Number(gwei), 2)
   } catch (error) {
     console.error('[TransferService] getGasFee', error)
-    return '0'
+    return 0
   }
 }
 
@@ -76,13 +51,18 @@ async function fetchUnclaimedTransfers() {
 }
 
 export async function fetchUnclaimedTransfer() {
-  const transfers = await fetchUnclaimedTransfers()
+  try {
+    const transfers = await fetchUnclaimedTransfers()
 
-  if (transfers.length) {
-    return transfers[0]
+    if (transfers.length) {
+      return transfers[0]
+    }
+
+    return null
+  } catch (error) {
+    requestErrorHandlerAlert(error, 'Fetch unclaimed transfer error', true)
+    return null
   }
-
-  return null
 }
 
 export async function confirmUnclaimedTransfer() {

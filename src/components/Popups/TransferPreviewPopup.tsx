@@ -7,7 +7,7 @@ import { ContractSendMethod } from 'web3-eth-contract'
 import { useStateIfMounted } from 'use-state-if-mounted'
 
 import StyleSheet, { scale } from '@/libs/StyleSheet'
-import { useMe } from '@/libs/hooks'
+import { useGwei, useMe } from '@/libs/hooks'
 import { TransferTextStatus, TransferType } from '@/types/transfer'
 import {
   confirmTransfer,
@@ -27,7 +27,6 @@ import { Dialog } from '../DialogProvider'
 interface TransferPreviewProps {
   address: string
   amount: number
-  gasFee: number | string
   transfer?: TransferType
   onClose?: () => void
 }
@@ -35,12 +34,12 @@ interface TransferPreviewProps {
 const TransferPreviewDialog: React.FC<TransferPreviewProps> = ({
   address,
   amount,
-  gasFee,
   transfer,
   onClose = Dialog.close
 }) => {
   const { t } = useTranslation()
   const user = useMe()
+  const gwei = useGwei()
   const [status, setStatus] = useStateIfMounted(TransferTextStatus.Waiting)
   const [loading, setLoading] = useStateIfMounted(false)
   const [transactionHash, setTransactionHash] = useStateIfMounted('')
@@ -140,9 +139,20 @@ const TransferPreviewDialog: React.FC<TransferPreviewProps> = ({
       </section>
       <section>
         <label style={styles.label}>{t('transfer.gas_label')}</label>
-        <div style={styles.value}>
-          <span style={styles.valueText}>{gasFee}</span>
-          <span style={styles.currencySymbol}>ETH</span>
+        <div className="row">
+          <div style={styles.value}>
+            {gwei === 0 && <Loading />}
+            {gwei !== 0 && (
+              <a
+                href="https://etherchain.org/tools/gasnow"
+                target="_blank"
+                rel="noreferrer"
+                style={styles.link}>
+                <span style={styles.valueText}>{gwei}</span>
+                <span style={styles.currencySymbol}>Gwei</span>
+              </a>
+            )}
+          </div>
         </div>
       </section>
       <section>
@@ -161,12 +171,7 @@ const TransferPreviewDialog: React.FC<TransferPreviewProps> = ({
               {t('transfer.view_on_etherscan')}
             </a>
           )}
-          {loading && (
-            <Spin
-              style={styles.loading}
-              indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />}
-            />
-          )}
+          {loading && <Loading />}
         </div>
       </section>
       <Button
@@ -180,6 +185,12 @@ const TransferPreviewDialog: React.FC<TransferPreviewProps> = ({
         disabled={loading}
       />
     </div>
+  )
+}
+
+const Loading = () => {
+  return (
+    <Spin style={styles.loading} indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
   )
 }
 
@@ -239,6 +250,12 @@ const styles = StyleSheet.create({
   },
   error: {
     color: '#ff4d4f'
+  },
+  link: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: 'white'
   }
 })
 

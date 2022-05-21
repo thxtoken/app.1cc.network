@@ -5,7 +5,8 @@ import HTTP from '@/services/http'
 import store from '@/store'
 import { BubbleType } from '@/types/bubble'
 
-import { secondsFormat } from './utlis'
+import { delay, secondsFormat } from './utlis'
+import { getGasFee } from '@/services/transfer'
 
 export function useWalletConnected() {
   const [connected, setConnected] = useState(window.ethereum.isConnected())
@@ -123,4 +124,26 @@ export function useIsMounted() {
 export function useForceUpdate() {
   const [value, setValue] = useState(0)
   return () => setValue(value + 1)
+}
+
+export function useGwei() {
+  const [gwei, setGwei] = useState(0)
+  const stop = useRef(false)
+
+  const updateGwei = useCallback(async () => {
+    const gasFee = await getGasFee()
+    setGwei(gasFee)
+    console.log('[useGwei] updateGwei', gasFee)
+    await delay(3000)
+    !stop.current && updateGwei()
+  }, [])
+
+  useEffect(() => {
+    updateGwei()
+    return () => {
+      stop.current = true
+    }
+  }, [updateGwei])
+
+  return gwei
 }
