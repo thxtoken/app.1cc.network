@@ -7,7 +7,7 @@ import { ContractSendMethod } from 'web3-eth-contract'
 import { useStateIfMounted } from 'use-state-if-mounted'
 
 import StyleSheet, { scale } from '@/libs/StyleSheet'
-import { useGwei, useMe } from '@/libs/hooks'
+import { useGasPrice, useMe } from '@/libs/hooks'
 import { TransferTextStatus, TransferType } from '@/types/transfer'
 import {
   confirmTransfer,
@@ -39,7 +39,7 @@ const TransferPreviewDialog: React.FC<TransferPreviewProps> = ({
 }) => {
   const { t } = useTranslation()
   const user = useMe()
-  const gwei = useGwei()
+  const gwei = useGasPrice()
   const [status, setStatus] = useStateIfMounted(TransferTextStatus.Waiting)
   const [loading, setLoading] = useStateIfMounted(false)
   const [transactionHash, setTransactionHash] = useStateIfMounted('')

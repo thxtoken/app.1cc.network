@@ -2,6 +2,7 @@ import { Modal } from 'antd'
 
 import { TransferStatus, TransferType } from '@/types/transfer'
 import { ContractClaimTokensParams } from '@/types/contract'
+import { Unit } from 'web3-utils'
 
 import HTTP from './http'
 import { me } from './auth'
@@ -33,13 +34,13 @@ export async function updateTransfer(id: number | string, transaction_hash: stri
   })
 }
 
-export async function getGasFee() {
+export async function getGasPrice(unit: Unit = 'gwei') {
   try {
     const gasPrice = await web3.eth.getGasPrice()
-    const gwei = await web3.utils.fromWei(gasPrice, 'gwei')
+    const gwei = await web3.utils.fromWei(gasPrice, unit)
     return floor(Number(gwei), 2)
   } catch (error) {
-    console.error('[TransferService] getGasFee', error)
+    console.error('[TransferService] getGasPrice', error)
     return 0
   }
 }

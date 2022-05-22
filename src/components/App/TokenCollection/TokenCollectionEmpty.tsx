@@ -125,7 +125,7 @@ const TokenCollectionEmpty: React.FC<Props> = ({ address, bubbles }) => {
             .typeString('<br />')
             .typeString('What is the purpose of generating $1CC bubbles? ')
             .typeString('<br />')
-            .typeString('Please click the ‘About’ on the upper left corner for more information.')
+            .typeString('Please click the ‘About’ on the upper right corner for more information.')
             .typeString('<br />')
             .start()
         }}

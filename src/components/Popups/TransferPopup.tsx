@@ -4,7 +4,7 @@ import { debounce, isNumber } from 'lodash'
 import { Input, InputRef, message } from 'antd'
 
 import StyleSheet, { scale } from '@/libs/StyleSheet'
-import { useGwei, useMe } from '@/libs/hooks'
+import { useGasPrice, useMe } from '@/libs/hooks'
 import { addressSummary, delay } from '@/libs/utlis'
 import { getEthereumAddress } from '@/services/ens'
 import { syncUser } from '@/services/auth'
@@ -17,7 +17,7 @@ import { Dialog, DialogInstance } from '../DialogProvider'
 const TransferDialog: React.FC = () => {
   const { t } = useTranslation()
   const user = useMe()
-  const gwei = useGwei()
+  const gwei = useGasPrice()
 
   const [address, setAddress] = useState(user?.address || '')
   const [amount, setAmount] = useState(0)

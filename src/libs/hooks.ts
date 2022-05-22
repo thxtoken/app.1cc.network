@@ -6,11 +6,10 @@ import store from '@/store'
 import { BubbleType } from '@/types/bubble'
 
 import { delay, secondsFormat } from './utlis'
-import { getGasFee } from '@/services/transfer'
+import { getGasPrice } from '@/services/transfer'
 
 export function useWalletConnected() {
   const [connected, setConnected] = useState(window.ethereum.isConnected())
-
   return [connected, setConnected]
 }
 
@@ -126,15 +125,15 @@ export function useForceUpdate() {
   return () => setValue(value + 1)
 }
 
-export function useGwei() {
+export function useGasPrice() {
   const [gwei, setGwei] = useState(0)
   const stop = useRef(false)
 
   const updateGwei = useCallback(async () => {
-    const gasFee = await getGasFee()
-    setGwei(gasFee)
-    console.log('[useGwei] updateGwei', gasFee)
-    await delay(3000)
+    const gasPrice = await getGasPrice()
+    setGwei(gasPrice)
+    console.log('[useGasPrice] updateGwei', gasPrice)
+    await delay(5000)
     !stop.current && updateGwei()
   }, [])
 
