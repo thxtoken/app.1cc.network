@@ -78,7 +78,7 @@ export function isLogin() {
 }
 
 export function me() {
-  return store.user
+  return Storage.get('user')
 }
 
 export function isMe(user: UserType | string) {
@@ -92,7 +92,7 @@ export function isMe(user: UserType | string) {
 export async function syncUser() {
   const user = me()
   if (user) {
-    const self = await fetchUser(user.address)
+    const self = await fetchUser(user.id)
     store.user = { ...self }
     Storage.set('user', user)
   }
