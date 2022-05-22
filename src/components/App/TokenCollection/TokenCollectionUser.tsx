@@ -22,7 +22,7 @@ const TokenCollectionUser: React.FC<Props> = ({ address }) => {
   const location = useLocation()
   const state = location.state as LocationState
   const me = useMe()
-  const addr = state.user?.ens || addressSummary(address)
+  const addr = state?.user?.ens || addressSummary(address)
 
   if (!address || address === me?.address) {
     return null

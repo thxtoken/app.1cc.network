@@ -2,21 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import StyleSheet, { scale } from '@/libs/StyleSheet'
-import { BubbleType } from '@/types/bubble'
 import Typewriter from 'typewriter-effect'
 import { me } from '@/services/auth'
 
 interface Props {
   address?: string
-  bubbles: BubbleType[]
 }
 
-const TokenCollectionEmpty: React.FC<Props> = ({ address, bubbles }) => {
+const TokenCollectionEmpty: React.FC<Props> = ({ address }) => {
   const { t, i18n } = useTranslation()
-
-  if (bubbles.length) {
-    return null
-  }
 
   if (address && address !== me()?.address) {
     return (

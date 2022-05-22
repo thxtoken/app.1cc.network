@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Spin } from 'antd'
 import { Link, useParams } from 'react-router-dom'
-import { debounce, last, uniqBy } from 'lodash'
+import { last, uniqBy } from 'lodash'
 import { SyncOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +9,7 @@ import EventEmitter from '@/services/event'
 import StyleSheet, { scale } from '@/libs/StyleSheet'
 import { BubbleType } from '@/types/bubble'
 import { fetchBubbles } from '@/services/api'
-import { useMe } from '@/libs/hooks'
+import { useMe, useSubsequentBubbles } from '@/libs/hooks'
 import { locateBubbles } from '@/services/bubble'
 
 import Bubble from '../Bubble'
@@ -21,24 +21,26 @@ import TokenCollectionUser from './TokenCollectionUser'
 const TokenCollection: React.FC = () => {
   const [bubbles, setBubbles] = useState<BubbleType[]>([])
   const [loading, setLoading] = useState(true)
+  const { collectedCount, lastBubble, fetchSubsequentBubbles } = useSubsequentBubbles()
   const { t } = useTranslation()
   const { address } = useParams()
 
   const me = useMe()
   const account = address || me?.address
+  const empty = !loading && bubbles.length === 0
 
   const fetchData = useCallback(
     async (params = {}) => {
       const bubblesList = await fetchBubbles(account, params)
       setBubbles(locateBubbles(bubblesList))
-      lastBubble = last(bubblesList)
+      lastBubble.current = last(bubblesList)
       setLoading(false)
     },
-    [account]
+    [account, lastBubble]
   )
 
   const onCollect = async (bubble: BubbleType) => {
-    counter.count = counter.count + 1
+    collectedCount.current = collectedCount.current + 1
 
     const data = bubbles.map(item => {
       item.show = item.id !== bubble.id
@@ -46,18 +48,18 @@ const TokenCollection: React.FC = () => {
     })
 
     setBubbles(locateBubbles(data))
-    _fetchSubsequentBubbles(account)
+    fetchSubsequentBubbles(account)
   }
 
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setBubbles([])
     setLoading(true)
-    counter.count = 0
-    lastBubble = undefined
-  }
+    collectedCount.current = 0
+    lastBubble.current = undefined
+  }, [collectedCount, lastBubble])
 
   const onRefresh = (e: any) => {
-    const params = { after: lastBubble?.id }
+    const params = { after: lastBubble.current?.id }
     resetState()
     fetchData(params)
   }
@@ -68,7 +70,7 @@ const TokenCollection: React.FC = () => {
 
   useEffect(() => {
     resetState()
-  }, [])
+  }, [resetState])
 
   useEffect(() => {
     setBubbles([])
@@ -95,7 +97,7 @@ const TokenCollection: React.FC = () => {
         ))}
       </div>
       {loading && <Spin size="default" />}
-      {!loading && <TokenCollectionEmpty bubbles={bubbles} address={account} />}
+      {empty && <TokenCollectionEmpty address={account} />}
       {address && <TokenCollectionUser address={address} />}
       {!address && <TokenCollectionLogs />}
       <div style={styles.menus}>
@@ -116,32 +118,6 @@ const TokenCollection: React.FC = () => {
     </div>
   )
 }
-
-let lastBubble: BubbleType | undefined
-const counter = { count: 0 }
-
-const fetchSubsequentBubbles = async (account?: string) => {
-  const count = counter.count
-
-  if (!lastBubble || count < 1) {
-    return
-  }
-
-  try {
-    counter.count = 0
-    const subsequentBubbles = await fetchBubbles(account, {
-      after: lastBubble?.id,
-      per_page: count
-    })
-    lastBubble = last(subsequentBubbles)
-    EventEmitter.emit(`FETCH_BUBBLES:${account}`, subsequentBubbles)
-  } catch (error) {
-    console.error(error)
-    counter.count = count
-  }
-}
-
-const _fetchSubsequentBubbles = debounce(fetchSubsequentBubbles, 1500)
 
 const styles = StyleSheet.create({
   container: {

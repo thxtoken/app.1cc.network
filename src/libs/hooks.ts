@@ -7,6 +7,9 @@ import { BubbleType } from '@/types/bubble'
 
 import { delay, secondsFormat } from './utlis'
 import { getGasPrice } from '@/services/transfer'
+import { fetchBubbles } from '@/services/api'
+import { debounce, last } from 'lodash'
+import EventEmitter from '@/services/event'
 
 export function useWalletConnected() {
   const [connected, setConnected] = useState(window.ethereum.isConnected())
@@ -64,6 +67,37 @@ export function useBubbles() {
   }
 
   return { bubbles, loading, setBubbles, onCollect }
+}
+
+export function useSubsequentBubbles() {
+  const collectedCount = useRef(0)
+  const lastBubble = useRef<BubbleType>()
+  const fetchSubsequentBubbles = useRef<any>()
+
+  const _fetchSubsequentBubbles = async (account?: string) => {
+    if (!lastBubble.current || collectedCount.current < 1) {
+      return
+    }
+
+    try {
+      const subsequentBubbles = await fetchBubbles(account, {
+        after: lastBubble.current?.id,
+        per_page: collectedCount.current
+      })
+      collectedCount.current = 0
+      lastBubble.current = last(subsequentBubbles)
+      EventEmitter.emit(`FETCH_BUBBLES:${account}`, subsequentBubbles)
+    } catch (error) {
+      console.error(error)
+      collectedCount.current = 0
+    }
+  }
+
+  if (!fetchSubsequentBubbles.current) {
+    fetchSubsequentBubbles.current = debounce(_fetchSubsequentBubbles, 1500 * 2)
+  }
+
+  return { collectedCount, lastBubble, fetchSubsequentBubbles: fetchSubsequentBubbles.current }
 }
 
 export function useCountDown(seconds: number, interval = 0.1): [number, (num: number) => void] {
