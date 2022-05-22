@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Spin } from 'antd'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,7 @@ import HTTP from '@/services/http'
 import StyleSheet, { scale } from '@/libs/StyleSheet'
 import { useRef } from 'react'
 import { EMPTY_FUNCTION } from '@/libs/utlis'
+import { useStateIfMounted } from 'use-state-if-mounted'
 
 interface Props {
   api: string
@@ -21,10 +22,10 @@ interface Props {
 }
 
 const SingleList: React.FC<Props> = props => {
-  const [list, setList] = useState<any[]>([])
-  const [loading, setLoading] = useState(props.loading)
-  const [canLoadingMore, setCanLoadingMore] = useState(true)
-  const [page, setPage] = useState(1)
+  const [list, setList] = useStateIfMounted<any[]>([])
+  const [loading, setLoading] = useStateIfMounted(props.loading)
+  const [canLoadingMore, setCanLoadingMore] = useStateIfMounted(true)
+  const [page, setPage] = useStateIfMounted(1)
   const { t } = useTranslation()
 
   const per_page = props.perPage || 10
