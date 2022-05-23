@@ -61,6 +61,7 @@ const SingleList: React.FC<Props> = props => {
       setCanLoadingMore(false)
       return []
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list, page, per_page, props])
 
   fetchDataRef.current = fetchData
@@ -82,11 +83,15 @@ const SingleList: React.FC<Props> = props => {
       {list.map(item => (
         <props.itemView data={item} key={item?.id ? item.id : JSON.stringify(item)} />
       ))}
-      {loadingMore && <Spin style={styles.loading} />}
+      {loadingMore && (
+        <div style={styles.footer}>
+          <Spin style={styles.loading} />
+        </div>
+      )}
       {showLoadingMore && (
-        <footer style={styles.footer} onClick={() => fetchData()}>
+        <div style={styles.footer} onClick={() => fetchData()}>
           <span>{t('common.click_show_more')}</span>
-        </footer>
+        </div>
       )}
       {props.footerView && <props.footerView loading={loading} refresh={refresh} />}
       {!loading && isEmpty(list) && props.emptyView && <props.emptyView />}
@@ -108,7 +113,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    cursor: 'pointer'
+    alignItems: 'center',
+    cursor: 'pointer',
+    minHeight: scale(50),
+    marginBottom: scale(20)
   }
 })
 
