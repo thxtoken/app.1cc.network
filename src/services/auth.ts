@@ -26,10 +26,10 @@ export async function walletLogin() {
 
   try {
     message.loading({ content: i18next.t('message.waiting_for_signature'), key: 'login' })
-    const nonce = await fetchSignatureNonce()
-    const signature = await getSignature(account, nonce)
+    const msg = await fetchSignatureMessage(account)
+    const signature = await getSignature(account, msg)
     message.loading({ content: i18next.t('message.verifying_signature'), key: 'login' })
-    const user = await signatureAuth(account, signature, nonce)
+    const user = await signatureAuth(account, signature, msg)
     Storage.set(StorageKeys.WEB3_PROVIDER, wallet)
     message.success({ content: i18next.t('message.login_success'), key: 'login', duration: 1 })
     return user
@@ -43,11 +43,11 @@ export async function walletLogin() {
   }
 }
 
-export async function signatureAuth(address: string, signature: string, nonce: string) {
+export async function signatureAuth(address: string, signature: string, message: string) {
   const { data } = await HTTP.post<PostLoginResponse>('login', {
     signature,
     address,
-    nonce
+    message
   })
 
   const { user, token } = data
@@ -64,13 +64,13 @@ export async function signatureAuth(address: string, signature: string, nonce: s
   return user
 }
 
-async function fetchSignatureNonce() {
-  const response = await HTTP.get('nonce')
-  return response.data.nonce
+async function fetchSignatureMessage(account: string) {
+  const response = await HTTP.get('message', { params: { address: account } })
+  return response.data.message
 }
 
-async function getSignature(account: string, nonce: string) {
-  return await web3.eth.personal.sign(`1CC:${nonce}`, account, '')
+async function getSignature(account: string, message: string) {
+  return await web3.eth.personal.sign(message, account, '')
 }
 
 export function isLogin() {
@@ -99,12 +99,12 @@ export async function syncUser() {
 }
 
 export async function addressLogin(address: string) {
-  const nonce = await fetchSignatureNonce()
+  const message = await fetchSignatureMessage(address)
 
   const { data } = await HTTP.post<PostLoginResponse>('login', {
     signature: '123456',
     address,
-    nonce
+    message
   })
 
   const { user, token } = data

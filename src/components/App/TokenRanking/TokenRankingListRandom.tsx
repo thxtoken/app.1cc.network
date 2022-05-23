@@ -70,7 +70,7 @@ const RandomListFooter: React.FC<any> = ({ loading, refresh, refreshCount, ttl }
   }
 
   const getRefreshTimesText = () => {
-    if (i18next.language === 'en') {
+    if (i18next.language === 'en_us') {
       if (refreshCount === 1) return 'once'
       if (refreshCount === 2) return 'twice'
       return `${refreshCount} times`

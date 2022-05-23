@@ -12,7 +12,7 @@ export const getHttpClient = () => {
 
   client.defaults.headers.common = {
     Accept: 'application/json',
-    Language: Storage.get('language') || 'en'
+    Language: Storage.get('language') || 'en_us'
   }
 
   if (isLogin()) {
