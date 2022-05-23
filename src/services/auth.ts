@@ -127,7 +127,7 @@ export function logout() {
   resetHttpClient()
   Modal.destroyAll()
   EventEmitter.emit('AUTH_LOGOUT')
-  message.success(i18next.t('message.logout_success'))
+  message.info(i18next.t('message.logout_success'))
 }
 
 export function logoutConfirm() {

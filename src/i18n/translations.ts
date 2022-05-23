@@ -17,7 +17,7 @@ const translations = {
       wallet: {
         wallet: 'Wallet',
         account_address: 'ACCOUNT ADDRESS',
-        connect_wallet: 'Connect to a wallet',
+        connect_wallet: 'Connect Wallet',
         disconnect_wallet: 'Disconnect Wallet',
         not_connected: 'Not Connected',
         connected_to: 'CONNECTED TO',
@@ -126,7 +126,7 @@ const translations = {
         wallet_disconnected: 'Wallet disconnected',
         wallet_chain_changed: 'Wallet network changed',
         wallet_connected: 'Wallet connected',
-        logout_success: 'Logout Success'
+        logout_success: 'You are logged out'
       }
     }
   },
