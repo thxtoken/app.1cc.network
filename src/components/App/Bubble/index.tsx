@@ -143,13 +143,20 @@ const Bubble: React.FC<Props> = props => {
     <div key={bubble.id} onClick={onClick} onDoubleClick={onDoubleClick} style={containerStyle}>
       <div style={{ ...styles.full, ...floatAnimate }}>
         {Boolean(collectedTokens) && (
-          <div style={tokenCollectStyle}>+{floor(collectedTokens, 2)}</div>
+          <div style={tokenCollectStyle}>+{getCollecedTokenValue(collectedTokens)}</div>
         )}
         <div className={css.bubble} style={{ transform: `scale(${bubbleScale})` }}>
-          {!loading && <span className={css.bubbleText}>{floor(bubble.remainingTokens, 0)}</span>}
+          {!loading && (
+            <span className={css.bubbleText}>{getTokenValue(bubble.remainingTokens)}</span>
+          )}
           {loading && <LoadingSpin />}
           <img src={require('@/assets/images/bubble.png')} className={css.bubbleBg} alt="bubble" />
-          {Boolean(countdown) && <div style={styles.countdown}>{getClockValue(clock)}</div>}
+          {Boolean(countdown) && (
+            <div style={styles.countdown}>
+              <div>{getClockValue(clock)}</div>
+              <div>{bubble.ripenedCountdown ? 'growing' : 'disappear'}</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -196,6 +203,14 @@ const getScale = (num: number) => {
   return 1
 }
 
+const getTokenValue = (num: number) => {
+  return floor(num, num < 10 ? 1 : 0)
+}
+
+const getCollecedTokenValue = (num: number) => {
+  return floor(num, num < 0.01 ? 4 : 2)
+}
+
 const getClockValue = (clock: DigitalClockType) => {
   if (Number(clock.hours) > 0) {
     const hours = padStart(String(Number(clock.day) * 24 + Number(clock.hours)), 2, '0')
@@ -225,7 +240,7 @@ const styles = StyleSheet.create({
   },
   countdown: {
     position: 'absolute',
-    bottom: scale(-40),
+    bottom: scale(-75),
     left: 0,
     right: 0,
     textAlign: 'center',
