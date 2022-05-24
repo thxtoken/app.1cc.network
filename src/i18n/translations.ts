@@ -41,7 +41,9 @@ const translations = {
       },
       bubble: {
         empty_placeholder: `No 1CC generated, you can visit other people's homepage to collect.`,
-        collect_log: 'Collected {{count}} 1CC'
+        collect_log: 'Collected {{count}} 1CC',
+        growing: 'growing',
+        disappear: 'to disappear'
       },
       ranking: {
         leaderboard: '24H Leaderboard',
@@ -170,7 +172,9 @@ const translations = {
       },
       bubble: {
         empty_placeholder: '还没有产生 1CC，你可以去他人主页搜集。',
-        collect_log: '采集了 {{count}} 枚 1CC'
+        collect_log: '采集了 {{count}} 枚 1CC',
+        growing: '成熟',
+        disappear: '过期'
       },
       ranking: {
         leaderboard: '24H 排行榜',
@@ -297,7 +301,9 @@ const translations = {
       },
       bubble: {
         empty_placeholder: '還沒有產生 1CC，你可以去他人主頁蒐集。',
-        collect_log: '採集了 $1 枚 1CC'
+        collect_log: '採集了 $1 枚 1CC',
+        growing: '成熟',
+        disappear: '過期'
       },
       ranking: {
         leaderboard: '24H 排行榜',

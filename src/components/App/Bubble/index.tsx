@@ -17,6 +17,7 @@ import { play, SOUNDS } from '@/services/sound'
 import { formatCountdown } from '@/services/format'
 
 import css from './index.module.css'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   bubble: BubbleType
@@ -31,16 +32,19 @@ const Bubble: React.FC<Props> = props => {
   const [collectedTokens, setCollectedTokens] = useState(0)
   const [clock] = useDigitalClock(countdown)
   const [loading, setLoading] = useState(false)
+  const { t } = useTranslation()
+
+  const ripenedCountdown = formatCountdown(bubble.ripenedCountdown)
+  const disappearedCountdown = formatCountdown(bubble.disappearedCountdown)
 
   // Auto remove disappeared bubble
   useEffect(() => {
     if (bubble) {
-      const disappearedCountdown = formatCountdown(bubble.disappearedCountdown)
       if (disappearedCountdown > 0 && clock.countdown === 0) {
         setShow(false)
       }
     }
-  }, [bubble, clock])
+  }, [bubble, clock, disappearedCountdown])
 
   const isOwner = isMe(bubble.userId)
   const collectable = isOwner ? formatCountdown(bubble.ripenedCountdown) === 0 : bubble.stealable
@@ -140,7 +144,7 @@ const Bubble: React.FC<Props> = props => {
   }
 
   return (
-    <div key={bubble.id} onClick={onClick} onDoubleClick={onDoubleClick} style={containerStyle}>
+    <div key={bubble.id} onDoubleClick={onDoubleClick} style={containerStyle}>
       <div style={{ ...styles.full, ...floatAnimate }}>
         {Boolean(collectedTokens) && (
           <div style={tokenCollectStyle}>+{getCollecedTokenValue(collectedTokens)}</div>
@@ -150,11 +154,18 @@ const Bubble: React.FC<Props> = props => {
             <span className={css.bubbleText}>{getTokenValue(bubble.remainingTokens)}</span>
           )}
           {loading && <LoadingSpin />}
-          <img src={require('@/assets/images/bubble.png')} className={css.bubbleBg} alt="bubble" />
+          <img
+            src={require('@/assets/images/bubble.png')}
+            className={css.bubbleBg}
+            alt="bubble"
+            onClick={onClick}
+          />
           {Boolean(countdown) && (
-            <div style={styles.countdown}>
-              <div>{getClockValue(clock)}</div>
-              <div>{bubble.ripenedCountdown ? 'growing' : 'disappear'}</div>
+            <div style={styles.countdown} onClick={onClick}>
+              <div style={styles.countdownValue}>{getClockValue(clock)}</div>
+              <div style={styles.countdownText}>
+                {ripenedCountdown ? t('bubble.growing') : t('bubble.disappear')}
+              </div>
             </div>
           )}
         </div>
@@ -226,12 +237,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: scale(BUBBLE_SIZE),
     height: scale(BUBBLE_SIZE),
-    borderRadius: '50px',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer'
+    alignItems: 'center'
   },
   full: {
     display: 'flex',
@@ -239,16 +248,27 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   countdown: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
-    bottom: scale(-75),
-    left: 0,
+    height: scale(70),
+    bottom: scale(-70),
+    left: scale(-(260 - BUBBLE_SIZE) / 2),
     right: 0,
     textAlign: 'center',
-    fontSize: scale(24),
-    lineHeight: scale(30),
+    fontSize: scale(26),
     color: '#1ADEED',
-    fontFamily: 'JDZhengHT'
+    fontFamily: 'DIN',
+    lineHeight: scale(30),
+    minWidth: scale(260),
+    cursor: 'pointer'
   },
+  countdownValue: {
+    marginRight: scale(10)
+  },
+  countdownText: {},
   tokenCollect: {
     position: 'absolute',
     justifyContent: 'center',
