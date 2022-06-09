@@ -54,7 +54,8 @@
     "typescript": "^4.4.2",
     "typewriter-effect": "^2.18.2",
     "use-state-if-mounted": "^1.0.7",
-    "web3": "^1.7.3"
+    "web3": "^1.7.3",
+    "resso": "^0.4.0"
   },
   "devDependencies": {
     "assert": "^2.0.0",
@@ -73,7 +74,6 @@
     "prettier": "^2.6.1",
     "process": "^0.11.10",
     "react-app-rewired": "^2.2.1",
-    "resso": "^0.4.0",
     "source-map-explorer": "^2.5.2",
     "standard-version": "^9.3.2",
     "stream-browserify": "^3.0.0",

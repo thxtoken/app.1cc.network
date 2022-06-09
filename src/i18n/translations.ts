@@ -48,7 +48,7 @@ const translations = {
       ranking: {
         leaderboard: '24H Leaderboard',
         random_access: 'Random Access',
-        collected: 'Collected',
+        uncollectible: 'Uncollectible',
         collectible: 'Collectible',
         free_refresh_count: 'Free refresh {{count}}',
         free_refresh: '{{time}} Free refresh'
@@ -179,7 +179,7 @@ const translations = {
       ranking: {
         leaderboard: '24H 排行榜',
         random_access: '随机访问',
-        collected: '已采集',
+        uncollectible: '已采集',
         collectible: '可采集',
         free_refresh_count: '免费刷新{{count}}次',
         free_refresh: '{{time}} 后免费刷新'
@@ -301,14 +301,14 @@ const translations = {
       },
       bubble: {
         empty_placeholder: '還沒有產生 1CC，你可以去他人主頁蒐集。',
-        collect_log: '採集了 $1 枚 1CC',
+        collect_log: '採集了 {{count}} 枚 1CC',
         growing: '成熟',
         disappear: '過期'
       },
       ranking: {
         leaderboard: '24H 排行榜',
         random_access: '隨機訪問',
-        collected: '已採集',
+        uncollectible: '已採集',
         collectible: '可採集',
         free_refresh_count: '免費刷新{{count}}次',
         free_refresh: '{{time}} 後免費刷新'

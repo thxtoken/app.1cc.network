@@ -40,7 +40,7 @@ const TokenRankingListItem: React.FC<Props> = ({ data }) => {
         <span style={styles.username}>{user?.ens || addressSummary(address, false, 18)}</span>
       </div>
       <span style={StyleSheet.flatten([styles.collect, stealable && styles.collectable])}>
-        {stealable ? t('ranking.collectible') : t('ranking.collected')}
+        {stealable ? t('ranking.collectible') : t('ranking.uncollectible')}
       </span>
     </Link>
   )

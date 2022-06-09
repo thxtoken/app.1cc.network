@@ -40,7 +40,7 @@ export const getHttpClient = () => {
           const errors = data.errors
           if (errors) {
             const firstError = errors[Object.keys(errors)[0]][0]
-            message.error(firstError)
+            message.error({ content: firstError, key: 'error' })
           }
         }
 
@@ -51,7 +51,7 @@ export const getHttpClient = () => {
 
         // Server error
         if (status >= 500) {
-          message.error(status + ' Internal Server Error')
+          message.error({ content: status + ' Internal Server Error', key: 'error' })
         }
 
         console.log(status, data, headers)
@@ -59,7 +59,7 @@ export const getHttpClient = () => {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        message.error('服务器无响应')
+        message.error({ content: '服务器无响应', key: 'error' })
         console.log(error.request)
       } else {
         // Something happened in setting up the request that triggered an Error
