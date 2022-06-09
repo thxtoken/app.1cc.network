@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a501ea43.css",
+    "main.js": "/static/js/main.28dbd545.js",
+    "static/media/bubble.png": "/static/media/bubble.bfbec40fba379f7fa35f.png",
+    "static/media/Expressa-Regular.ttf": "/static/media/Expressa-Regular.4b6c7b07f1ef66481510.ttf",
+    "static/media/about_header_bg.png": "/static/media/about_header_bg.90dcd54a4334c3c3d6c9.png",
+    "static/media/about_text_zh_tw.png": "/static/media/about_text_zh_tw.17bcf55eacf2ecdb0276.png",
+    "static/media/JDZhengHT-Bold.ttf": "/static/media/JDZhengHT-Bold.c94e7a966285529a30d4.ttf",
+    "static/media/JDZhengHT-Light.ttf": "/static/media/JDZhengHT-Light.2bd7b1bd3ba857258b27.ttf",
+    "static/media/JDZhengHT-Regular.ttf": "/static/media/JDZhengHT-Regular.0888218a8062c65a3be9.ttf",
+    "static/media/about_text_zh.png": "/static/media/about_text_zh.ff340e4d7f1e39398d81.png",
+    "static/media/DINAlternate-Bold.ttf": "/static/media/DINAlternate-Bold.d4c31b4f3a82e1927245.ttf",
+    "static/media/about_text_en.png": "/static/media/about_text_en.f57891a1a757cc7ca526.png",
+    "index.html": "/index.html",
+    "static/media/nav-menu.svg": "/static/media/nav-menu.9b9c43f7f847bc66e2fac3e076727b8a.svg"
+  },
+  "entrypoints": [
+    "static/css/main.a501ea43.css",
+    "static/js/main.28dbd545.js"
+  ]
+}
